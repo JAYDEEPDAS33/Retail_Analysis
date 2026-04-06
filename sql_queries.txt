@@ -1,0 +1,114 @@
+/*
+========================================
+Retail Transactions Table Schema
+========================================
+This table stores transactional data including product details,
+customer information, pricing, and purchase timestamps.
+*/
+
+CREATE TABLE retail_transactions (
+    InvoiceNo TEXT,
+    StockCode TEXT,
+    Description TEXT,
+    Quantity INTEGER,
+    InvoiceDate TEXT,
+    UnitPrice NUMERIC,
+    CustomerID NUMERIC,
+    Country TEXT
+);
+
+-- Preview first 10 rows of retail_transactions table
+
+SELECT * 
+FROM retail_transactions
+LIMIT 10;
+
+-- Total Number of Records
+
+SELECT COUNT(*)
+FROM retail_transactions;
+
+-- Modify Retail Transactions Table
+
+ALTER TABLE retail_transactions
+
+-- Add Revenue Column
+
+ADD COLUMN Revenue NUMERIC;
+
+-- Update Revenue Values
+
+UPDATE retail_transactions
+
+SET Revenue = Quantity * UnitPrice;
+
+-- Remove Cancelled Transactions
+
+DELETE FROM retail_transactions
+WHERE InvoiceNo LIKE 'C%';
+
+-- Remove Records with Missing CustomerID
+
+DELETE FROM retail_transactions
+WHERE CustomerID IS NULL;
+
+-- Identify Records with Negative Quantity
+
+SELECT *
+FROM retail_transactions
+WHERE Quantity < 0;
+
+
+-- Top Customers by Revenue
+
+SELECT
+    CustomerID,
+    SUM(Revenue) AS total_revenue
+FROM retail_transactions
+GROUP BY CustomerID
+ORDER BY total_revenue DESC
+LIMIT 10;
+
+-- Monthly Revenue Analysis
+
+SELECT
+TO_CHAR(InvoiceDate::timestamp, 'YYYY-MM') AS month,
+SUM(Revenue) AS monthly_revenue
+FROM retail_transactions
+GROUP BY month
+ORDER BY month;
+
+-- Average Order Value Calculation
+
+SELECT AVG(order_total)
+FROM (
+    SELECT
+        InvoiceNo,
+        SUM(Revenue) AS order_total
+    FROM retail_transactions
+    GROUP BY InvoiceNo
+) AS orders;
+
+-- Top Products by Quantity Sold
+
+SELECT
+    Description,
+    SUM(Quantity) AS total_sold
+FROM retail_transactions
+GROUP BY Description
+ORDER BY total_sold DESC
+LIMIT 10;
+
+-- Country-Wise Revenue Analysis
+
+SELECT
+    Country,
+    SUM(Revenue) AS total_revenue
+FROM retail_transactions
+GROUP BY Country
+ORDER BY total_revenue DESC;
+
+-- Total Record Count
+
+SELECT COUNT(*) FROM retail_transactions;
+
