@@ -450,5 +450,5 @@ This retail analysis methodology provides a comprehensive framework for understa
 
 ---
 
-**Report Prepared By:** Data Science Workflow  
+**Report Prepared By:** JAYDEEP DAS
 **Last Updated:** March 25, 2026
